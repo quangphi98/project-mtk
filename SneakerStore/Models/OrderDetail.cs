@@ -15,7 +15,7 @@ namespace SneakerStore.Models
     public partial class OrderDetail
     {
         public int ID { get; set; }
-        public Nullable<int> IDProduct { get; set; }
+        public int IDProduct { get; set; }
         public Nullable<int> IDOrder { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<double> UnitPrice { get; set; }
