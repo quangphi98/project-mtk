@@ -211,6 +211,8 @@
     <Compile Include="Models\Voucher.cs">
       <DependentUpon>DBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Payment\Context.cs" />
+    <Compile Include="Payment\IChoice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -19,7 +19,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Tên sản phẩm</th>   
+                <th>Tên sản phẩm</th>
                 <th>Hình sản phẩm</th>
                 <th>Giá</th>
                 <th>Số lượng</th>
@@ -80,59 +80,91 @@
 
         </tbody>
 
+        <form method="post" action="PaymentChoice">
         <tfoot>
             <tr>
             </tr>
             <tr>
                 <td colspan="2"></td>
                 <td colspan="4">
-                    @using (Html.BeginForm("PaymentWithPaypal", "ShoppingCart"))
-                    {
-                        <table style="border-collapse:separate;border-spacing:5px;">
-                            <td></td>
-                            @if (Session["UserName"] == null)
-                            {
-                                <tr>
-                                    <td></td>
-                                    <td style="color:#ff0000;">Vui lòng đăng nhập để thanh toán</td>
-                                    <td>
-                                        <a href="@Url.Action("LoginCus","Customers")" class="btn btn-success">Đăng nhập</a>
-                                    </td>
-                                </tr>
 
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td><input type="hidden" name="CodeCustomer" value="@Session["IDCus"]" required /></td>
-                                </tr>
+                    <table style="border-collapse:separate;border-spacing:5px;">
 
-                                <tr>
-                                    <td>Địa chỉ giao hàng:</td>
-                                    <td><input type="text" name="AddressDelivery" required /></td>
-                                </tr>
-                                <tr>
-                                    <td>Số điện thoại:</td>
-                                    <td><input type="text" name="PhoneNumber" required /></td>
-                                </tr>
+                        <!-- Other form inputs -->
+                        @if (Session["UserName"] == null)
+                        {
+                            <tr>
+                                <td style="color:#ff0000;">Vui lòng đăng nhập để thanh toán</td>
+                                <td>
+                                    <a href="@Url.Action("LoginCus","Customers")" class="btn btn-success">Đăng nhập</a>
+                                </td>
+                            </tr>
 
-                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>DEBUG: User is logged in. UserName: @Session["NameCus"]</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="paymentMethod" value="paypal" checked> PayPal
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="paymentMethod" value="cod"> Thanh toán khi nhận hàng
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="hidden" name="CodeCustomer" value="@Session["IDCus"]" required /></td>
+                            </tr>
 
-                            <td colspan="6" style="text-align:right;font-size:20px;color:#ee4d2d">
-                                <hr />
-                                Tổng tiền: @String.Format("{0:0,0}", @Model.Total_price_after_dis())
-                                <span class="items-dong" style="font-size:20px;">₫</span>
-                                <input type="submit" value="Thanh toán" name="CheckOut" class="btn btn-warning" />
-                            </td>
-                        </table>
-                    }
-
+                            <tr>
+                                <td>Địa chỉ giao hàng:</td>
+                                <td><input type="text" name="AddressDelivery" required /></td>
+                            </tr>
+                            <tr>
+                                <td>Số điện thoại:</td>
+                                <td><input type="text" name="PhoneNumber" required /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="text-align:right;font-size:20px;color:#ee4d2d">
+                                    <hr />
+                                    Tổng tiền: @String.Format("{0:0,0}", @Model.Total_price_after_dis())
+                                    <span class="items-dong" style="font-size:20px;">₫</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="text-align:right;font-size:20px;color:#ee4d2d">
+                                    <hr />
+                                    <button style="display: inline-block;
+                                         border-radius: 5px;
+                                         padding: 10px 20px;
+                                         font-size: 16px;
+                                         font-weight: bold;
+                                         text-align: center;
+                                         text-decoration: none;
+                                         color: #fff;
+                                         background-color: #007bff;
+                                         border: none;
+                                         cursor: pointer;
+                                         transition: background-color 0.3s ease;
+                                         position: relative;
+                                         bottom: 2.5rem"
+                                            type="submit">
+                                        Thanh toán
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
                 </td>
             </tr>
-        <td>
-            <a style="color:orangered; text-decoration:none;" href="@Url.Action("Index","Product")">Tìm các sản phẩm khác</a>
-        </td>
-        </tfoot>
+        </tfoot>    
+        </form>
     </table>
 }
 else

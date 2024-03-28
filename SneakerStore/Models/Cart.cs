@@ -43,15 +43,15 @@ namespace SneakerStore.Models
             return items.Sum(s => s._quantity);
         }
         //Viet ham tinh thanh tien cho moi dong san pham
-        public decimal Total_money()
+        public double Total_money()
         {
             var total = items.Sum(s => s._quantity * (s._product.Price));
-            return (decimal)total;
+            return (double)total;
         }
 
-        public decimal Total_price_after_dis() 
+        public double Total_price_after_dis() 
         {
-            decimal totalPrice = Total_money();
+            double totalPrice = Total_money();
 
             if (System.Web.HttpContext.Current.Session != null && System.Web.HttpContext.Current.Session["perCentDis"] != null)
             {
@@ -59,13 +59,13 @@ namespace SneakerStore.Models
                 if (intValue.HasValue)
                 {
                     int perCentDis = (int)System.Web.HttpContext.Current.Session["perCentDis"];
-                    decimal totalAfterDiscount = totalPrice - (totalPrice * perCentDis / 100);
+                    double totalAfterDiscount = totalPrice - (totalPrice * perCentDis / 100);
 
-                    return (decimal)totalAfterDiscount;
+                    return (double)totalAfterDiscount;
                 }
 
             }
-            return (decimal)totalPrice;
+            return (double)totalPrice;
         }
 
 
