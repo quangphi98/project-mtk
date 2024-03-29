@@ -221,6 +221,8 @@
     <Compile Include="Models\Voucher.cs">
       <DependentUpon>DBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Payment\Context.cs" />
+    <Compile Include="Payment\IChoice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Discount\IDiscountStrategy.cs" />
     <Compile Include="Service\Discount\NoDiscountStrategy.cs" />

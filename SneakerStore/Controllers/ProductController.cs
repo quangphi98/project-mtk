@@ -63,7 +63,7 @@ namespace SneakerStore.Controllers
                 ViewBag.SuccessMessage = successMessage;
             }
 
-            eturn View(productList.ToPagedList(pageNum, pageSize));
+            return View(productList.ToPagedList(pageNum, pageSize));
 
         }
         public ActionResult Create()
