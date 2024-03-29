@@ -1,5 +1,6 @@
 ﻿using PayPal.Api;
 using SneakerStore.Models;
+using SneakerStore.Service.Discount;
 using SneakerStore.Payment;
 using System;
 using System.Collections.Generic;
@@ -143,16 +144,25 @@ namespace SneakerStore.Controllers
             Cart cart = Session["Cart"] as Cart;
             string discountCode = (string)form["discountCode"];
 
-            var check = database.Vouchers.
-                Where(s => s.MaVoucher == discountCode).FirstOrDefault();
+            var check = database.Vouchers
+                                .Where(s => s.MaVoucher == discountCode)
+                                .FirstOrDefault();
 
             if (check != null)
             {
                 int perCentDis = (int)check.PhanTramDis;
                 Session["perCentDis"] = perCentDis;
-                cart.Total_price_after_dis();
+
+                // Tạo một instance của PercentageDiscountStrategy
+                IDiscountStrategy discountStrategy = new PercentageDiscountStrategy(perCentDis);
+
+                // Truyền strategy vào phương thức Total_price_after_dis
+                decimal totalPriceAfterDiscount = cart.Total_price_after_dis(discountStrategy);
+
+                // Lưu tổng giá sau giảm giá vào session hoặc cart nếu cần thiết
             }
-            return RedirectToAction("ShowCart","ShoppingCart");
+
+            return RedirectToAction("ShowCart", "ShoppingCart");
         }
 
 		public ActionResult PaymentWithPaypal(string Cancel = null)

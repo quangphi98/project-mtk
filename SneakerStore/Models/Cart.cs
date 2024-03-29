@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SneakerStore.Service.Discount;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -49,6 +50,8 @@ namespace SneakerStore.Models
             return (double)total;
         }
 
+
+        public decimal Total_price_after_dis(IDiscountStrategy discountStrategy) 
         public double Total_price_after_dis() 
         {
             double totalPrice = Total_money();
@@ -59,12 +62,15 @@ namespace SneakerStore.Models
                 if (intValue.HasValue)
                 {
                     int perCentDis = (int)System.Web.HttpContext.Current.Session["perCentDis"];
+
+                    discountStrategy = new PercentageDiscountStrategy(perCentDis);
+                    return discountStrategy.ApplyDiscount(totalPrice);
                     double totalAfterDiscount = totalPrice - (totalPrice * perCentDis / 100);
 
                     return (double)totalAfterDiscount;
                 }
-
             }
+            return totalPrice;
             return (double)totalPrice;
         }
 

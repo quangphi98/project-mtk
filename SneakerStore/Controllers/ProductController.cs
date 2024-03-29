@@ -9,12 +9,21 @@ using PagedList;
 using PagedList.Mvc;
 using System.Data;
 using System.Data.Entity;
+using SneakerStore.Service.Send_Email;
+using System.Net.Mail;
+using System.Net;
 
 namespace SneakerStore.Controllers
 {
     public class ProductController : Controller
     {
         DBSneakerStoreEntities database = new DBSneakerStoreEntities();
+        private readonly IEmail _sendemail;
+
+        public ProductController(Email email)
+        {
+            _sendemail = email;
+        }
 
         public ActionResult SearchOption(int? page, double min = double.MinValue, double max = double.MaxValue)
         {
@@ -163,5 +172,39 @@ namespace SneakerStore.Controllers
 
             return View(query.Take(8));
         }
-    }
+
+        [HttpPost]
+        public ActionResult SendEmail(int productId)
+        {
+            var product = database.Products.FirstOrDefault(p => p.ProductID == productId);
+            if (product == null)
+            {
+                return HttpNotFound(); // Hoặc xử lý trường hợp sản phẩm không tồn tại
+            }
+
+            try
+            {
+                MailMessage message = _sendemail.CreateMailMessage();
+                SmtpClient smtp = _sendemail.CreateSmtpClient();
+                message.From = new MailAddress("laiquangphi@gmail.com"); // Địa chỉ email của bạn
+                message.To.Add(new MailAddress("laiquangphi4576@gmail.com")); // Địa chỉ email của người nhận
+
+                message.Subject = "Thông tin sản phẩm mới";
+                message.Body = $"Sản phẩm mới đã được thêm: {product.NamePro}, Giá: {product.Price}";
+
+                smtp.Port = 587; // Cổng SMTP của dịch vụ email của bạn
+                smtp.Host = "smtp.gmail.com"; // Địa chỉ máy chủ SMTP của dịch vụ email của bạn
+                smtp.EnableSsl = true; // Bật SSL nếu cần
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential("laiquangphi@gmail.com", "laiquangphi21102003"); // Tài khoản email của bạn
+
+                smtp.Send(message);
+                ViewBag.Message = "Email đã được gửi thành công!";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Gửi email thất bại: {ex.Message}";
+            }
+            return View();
+        }
 }
